@@ -6,8 +6,8 @@ let primaryImages = ["https://images.unsplash.com/photo-1575936123452-b67c3203c3
 let titles = ["test", "test2"];
 let subtitles = ["test", "test2"];
 let details = ["test", "test2"];
-let secondaryImages = ["", ""];
-let startingPrices = [20, 20];
+let secondaryImages = ["beskrivelse1", "beskrivelse2"];
+let startingPrices = ["20", "20"];
 let endTimes = [1689884260000, 1689884260000]; // Make sure to fix these to UTC time so they don't change with the users timezone
 
 // Random auction information

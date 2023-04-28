@@ -9,17 +9,16 @@ let items = [
     subtitle: "Som ny - brukt en gang",
     detail: "test test",
     secondaryImage: "https://brandonthegamedev.com/wp-content/uploads/2019/10/Tapestry-Board-Game.jpg",
-    amount: 300,
-    endTime: "2023-05-20T00:00:00+00:00",
-  },
+        amount: 300,
+        endTime: "2023-04-29T00:00:00+00:00"
   {
     primaryImage: "https://d3ur8vwbngpbs7.cloudfront.net/assets/editorial/2020/02/parks-board-game-cover.jpg",
     title: "Parks",
     subtitle: "Ny i plastikk",
     detail: "test test",
     secondaryImage: "https://d3ur8vwbngpbs7.cloudfront.net/assets/editorial/2020/02/parks-board-game-cover.jpg",
-    amount: 250,
-    endTime: "2023-05-20T00:00:00+00:00",
+      amount: 250,
+      endTime: "2023-04-29T00:00:00+00:00"
   },
   {
     primaryImage: "https://wheremeeplesmeet.files.wordpress.com/2019/02/img_4973.jpg?w=768",
@@ -27,8 +26,8 @@ let items = [
     subtitle: "Godt brukt",
     detail: "test test",
     secondaryImage: "https://wheremeeplesmeet.files.wordpress.com/2019/02/img_4973.jpg?w=768",
-    amount: 200,
-    endTime: "2023-05-20T00:00:00+00:00",
+      amount: 200,
+      endTime: "2023-04-29T00:00:00+00:00"
   },
   {
     primaryImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTO6YurAKjuE7SVvcngTB8b-GS9aNn366uHIw&usqp=CAU",
@@ -37,7 +36,7 @@ let items = [
     detail: "hmm!",
     secondaryImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTO6YurAKjuE7SVvcngTB8b-GS9aNn366uHIw&usqp=CAU",
     amount: 200,
-    endTime: "2023-05-20T00:00:00+00:00",
+    endTime: "2023-04-29T00:00:00+00:00"
   }
 ];
 

@@ -9,6 +9,7 @@ import {
   signInAnonymously,
   onAuthStateChanged,
   updateProfile,
+  createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-auth.js";
 
 // -- Sign up modal and logic --
@@ -35,7 +36,7 @@ export function autoSignIn() {
       });
     } else {
       // Automatically create an anonymous account if user doesn't have one
-      signInAnonymously(auth);
+        createUserWithEmailAndPassword(auth);
     }
   });
 }

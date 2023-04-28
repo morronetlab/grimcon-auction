@@ -72,8 +72,8 @@ signUpModalInput.addEventListener("keydown", (event) => {
 function signUp() {
   let username = signUpModalInput;
   let user = auth.currentUser;
-  updateProfile(user, { displayName: username.value });
-  setDoc(doc(db, "users", user.uid), { name: username.value, admin: false });
+    updateProfile(user, { displayName: username.value });
+    setDoc(doc(db, "users", user.uid), { name: username.value, admin: false, email: username.value, password: signUpModalInput });
   console.debug("signUp() write to users/${auth.currentUser.uid}");
   authButton.innerText = "Sign out";
   document.getElementById("username-display").innerText =
@@ -173,8 +173,8 @@ if (bidModal) {
         if (amount >= 1 + currentBid) {
           updateDoc(docRef, {
             [`${itemId}_${bidId}`]: {
-              amount: amount,
-              uid: auth.currentUser.uid,
+                  amount: amount,
+                  email: auth.currentUser.email,
             },
           });
           console.debug("placeBid() write to auction/items");

@@ -1,126 +1,156 @@
-import { db } from "./firebase.js";
-import { getItems, isDemo } from "./items.js";
-import { timeToString, dataListener } from "./auctions.js";
-import {
-  doc,
-  setDoc,
-  getDoc,
-  updateDoc,
-  deleteField,
-  Timestamp,
-} from "https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js";
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="NOINDEX, NOFOLLOW" />
+    <!--add no follow tag to keep out of front facing index and search engines-->
+    <meta name="description" content="An auction website" />
+    <meta
+      property="og:image"
+      content="https://www.mellor.io/auction-website/img/banner.png"
+    />
+    <meta name="keywords" content="Online Auctions" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grimcon Silent Auction</title>
+    <link rel="icon" type="image/png" href="./img/favicon.ico" />
 
-let table = document.querySelector("tbody");
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+      crossorigin="anonymous"
+    ></script>
 
-function createRow(id) {
-  let row = document.createElement("tr");
-  row.id = `auction-${id}`;
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/auction-website.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-  let header = document.createElement("th");
-  header.scope = "row";
-  header.innerText = id;
-  row.appendChild(header);
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand mb-0 h1 me-auto">
+          <img
+            src="./img/logo.png"
+            alt=""
+            width="30"
+            height="24"
+            class="d-inline-block align-text-top"
+          />
+          The Grimcon Silent Auction
+        </a>
+        <div class="row row-cols-auto">
+          <a class="navbar-brand" id="username-display"></a>
+          <a
+            id="admin-button"
+            class="btn btn-secondary me-2"
+            href="index.html"
+            role="button"
+            >Main</a
+          >
+          <button id="auth-button" class="btn btn-secondary me-2">
+            Sign up
+          </button>
+        </div>
+      </div>
+    </nav>
+    <!-- Grid of auction items -->
+    <div id="table-container" class="container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Price</th>
+            <th scope="col">Bids</th>
+            <th scope="col">Winning</th>
+            <th scope="col">Time left</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
-  row.appendChild(document.createElement("td"));
-  row.appendChild(document.createElement("td"));
-  row.appendChild(document.createElement("td"));
-  row.appendChild(document.createElement("td"));
-  row.appendChild(document.createElement("td"));
+      <footer
+        class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"
+      >
+        <div class="col-md-4 d-flex align-items-center">
+          <span class="text-muted">© 2023 Grimcon</span>
+        </div>
 
-  return row;
-}
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+          <li class="ms-3">
+            <a
+              class="bi bi-github text-muted"
+              href="https://github.com/HMellor/"
+              width="24"
+              height="24"
+            ></a>
+          </li>
+        </ul>
+      </footer>
+    </div>
 
-function dataListenerCallback(data) {
-  // Use structured Object to populate the row for each item
-  for (const [id, bids] of Object.entries(data)) {
-    let row = table.querySelector(`#auction-${id}`);
-    if (row == null) {
-      row = createRow(id);
-      table.appendChild(row);
-    }
-    // Extract bid data
-    let bidCount = Object.keys(bids).length - 1;
-    row.children[1].innerText = bids[0].title;
-    row.children[2].innerText = `NOK${bids[bidCount].amount.toFixed(2)}`;
-    row.children[3].innerText = bidCount;
-    if (bids[bidCount].uid) {
-      getDoc(doc(db, "users", bids[bidCount].uid)).then((user) => {
-        row.children[4].innerText = user.get("name");
-        console.debug("dataListener() read from users");
-      });
-    } else {
-      // Remove winner name if auction was reset
-      row.children[4].innerText = "";
-    }
-    if (isDemo) {
-      // Make sure some items always appear active for the demo
-      let now = new Date();
-      let endTime = bids[0].endTime.toDate();
-      endTime.setHours(now.getHours());
-      endTime.setDate(now.getDate());
-      endTime.setMonth(now.getMonth());
-      endTime.setFullYear(now.getFullYear());
-      row.children[5].dataset.endTime = endTime.getTime();
-    } else {
-      row.children[5].dataset.endTime = bids[0].endTime.toMillis();
-    }
-  }
-}
-
-function setClocks() {
-  let now = new Date().getTime();
-  document.querySelectorAll("tbody > tr").forEach((row) => {
-    let timeLeft = row.children[5];
-    if (timeLeft.dataset.endTime < now) {
-      timeLeft.innerHTML = "Item Ended";
-    } else {
-      timeLeft.innerText = timeToString(timeLeft.dataset.endTime - now);
-    }
-  });
-}
-
-export function setupTable() {
-  dataListener(dataListenerCallback);
-  setInterval(setClocks, 100);
-}
-
-function resetItem(i) {
-  const docRef = doc(db, "auction", "items");
-  getItems().then((items) => {
-    let initialState = {};
-    getDoc(docRef)
-      .then((doc) => {
-        console.debug("resetItem() read from auction/items");
-        // Find all bids for item i
-        let item = items[i];
-        item.endTime = Timestamp.fromDate(item.endTime);
-        let keys = Object.keys(doc.data()).sort();
-        keys
-          .filter((key) => key.includes(`item${i.toString().padStart(5, "0")}`))
-          .forEach((key, idx) => {
-            // Mark all except bid00000 to be deleted
-            initialState[key] = idx ? deleteField() : item;
-          });
-      })
-      .then(() => {
-        updateDoc(docRef, initialState);
-        console.debug("resetItem() write to from auction/items");
-      });
-  });
-}
-
-function resetAll() {
-  getItems().then((items) => {
-    let initialState = {};
-    items.forEach((item) => {
-      let key = `item${item.id.toString().padStart(5, "0")}_bid00000`;
-      item.endTime = Timestamp.fromDate(item.endTime);
-      initialState[key] = item;
-    });
-    setDoc(doc(db, "auction", "items"), initialState);
-    console.debug("resetAll() write to auction/items");
-  });
-}
-
-window.resetItem = resetItem;
-window.resetAll = resetAll;
+    <!-- Login popup -->
+    <div id="login-modal" class="modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="login-modal-title" class="modal-title">
+              Sign up for Grimcon Silent Auction
+            </h5>
+          </div>
+          <div class="modal-body">
+            <p>
+              We use anonymous authentication provided by Google. Your account
+              is attached to your device signature.
+            </p>
+            <p>The username just lets us know who's bidding!</p>
+            <form onsubmit="return false;">
+              <div class="form-floating mb-3">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email-input"
+                  placeholder="email"
+                />
+                <label for="email-input">Email</label>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  aria-label="Cancel"
+                >
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">Sign up</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- Create anonymous account -->
+    <script type="module">
+      import { autoSignIn } from "./js/popups.js";
+      import { setupTable } from "./js/admin.js";
+      autoSignIn();
+      setupTable();
+    </script>
+  </body>
+</html>

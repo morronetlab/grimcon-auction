@@ -29,12 +29,15 @@ function setClocks() {
   document.querySelectorAll(".card").forEach((card) => {
     let timeLeft = card.querySelector(".time-left");
     // disable bidding on finished auctions
+    timeLeft.innerHTML = timeToString(card.dataset.endTime - now);
+    /*
     if (card.dataset.endTime < now) {
       timeLeft.innerHTML = "Item Ended";
       card.querySelector(".btn-primary").setAttribute("disabled", "");
     } else {
       timeLeft.innerHTML = timeToString(card.dataset.endTime - now);
     }
+    */
   });
 }
 

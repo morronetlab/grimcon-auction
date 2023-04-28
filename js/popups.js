@@ -9,7 +9,6 @@ import {
   signInAnonymously,
   onAuthStateChanged,
   updateProfile,
-  createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-auth.js";
 
 // -- Sign up modal and logic --
@@ -36,7 +35,7 @@ export function autoSignIn() {
       });
     } else {
       // Automatically create an anonymous account if user doesn't have one
-        createUserWithEmailAndPassword(auth);
+      signInAnonymously(auth);
     }
   });
 }
@@ -72,8 +71,8 @@ signUpModalInput.addEventListener("keydown", (event) => {
 function signUp() {
   let username = signUpModalInput;
   let user = auth.currentUser;
-    updateProfile(user, { displayName: username.value });
-    setDoc(doc(db, "users", user.uid), { name: username.value, admin: false, email: username.value, password: signUpModalInput });
+  updateProfile(user, { displayName: username.value });
+  setDoc(doc(db, "users", user.uid), { name: username.value, admin: false });
   console.debug("signUp() write to users/${auth.currentUser.uid}");
   authButton.innerText = "Sign out";
   document.getElementById("username-display").innerText =
@@ -173,8 +172,8 @@ if (bidModal) {
         if (amount >= 1 + currentBid) {
           updateDoc(docRef, {
             [`${itemId}_${bidId}`]: {
-                  amount: amount,
-                  email: auth.currentUser.email,
+              amount: amount,
+              uid: auth.currentUser.uid,
             },
           });
           console.debug("placeBid() write to auction/items");

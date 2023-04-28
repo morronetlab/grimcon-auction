@@ -113,22 +113,20 @@
           </div>
           <div class="modal-body">
             <p>
-              Please register with email and password. Important to use an email that is real, then you will get notifications if someone bids over your current bids for auctions...
+              We use anonymous authentication provided by Google. Your account
+              is attached to your device signature.
             </p>
-            <p>The email just lets us know who's bidding!</p>
+            <p>The username just lets us know who's bidding!</p>
             <form onsubmit="return false;">
-                <div class="form-floating mb-3">
-                    <input type="email"
-                           class="form-control"
-                           id="email-input"
-                           placeholder="email" />
-                    <label for="email-input">Email</label>
-                    <input type="password"
-                           class="form-control"
-                           id="password-input"
-                           placeholder="password" />
-                    <label for="email-input">Password</label>
-                </div>
+              <div class="form-floating mb-3">
+                <input
+                  type="username"
+                  class="form-control"
+                  id="username-input"
+                  placeholder="username"
+                />
+                <label for="username-input">Username</label>
+              </div>
               <div class="modal-footer">
                 <button
                   type="button"

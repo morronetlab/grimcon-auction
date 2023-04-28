@@ -187,7 +187,7 @@ if (bidModal) {
         } else {
           amountElement.classList.add("is-invalid");
           feedback.innerText =
-            "You must bid at least £" + (currentBid + 1).toFixed(2) + "!";
+            "You must bid at least NOK" + (currentBid + 1).toFixed(2) + "!";
           bidModalSubmit.removeAttribute("disabled", "");
         }
       });

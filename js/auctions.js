@@ -85,7 +85,7 @@ function generateItemCard(auction) {
   bidRow.appendChild(bidTitle);
 
   let bid = document.createElement("td");
-  bid.innerHTML = "£-.-- [- bids]";
+  bid.innerHTML = "NOK -.-- [- bids]";
   bid.classList.add("current-bid");
   bidRow.appendChild(bid);
 
@@ -145,7 +145,7 @@ function dataListenerCallback(data) {
     let bidCount = Object.keys(bids).length - 1;
     let currPound = bids[bidCount].amount.toFixed(2);
     // Add bid data to HTML
-    currentBid.innerHTML = `£${numberWithCommas(currPound)} [${bidCount} bid${
+    currentBid.innerHTML = `NOK${numberWithCommas(currPound)} [${bidCount} bid${
       bidCount != 1 ? "s" : ""
     }]`;
     // Update everything else

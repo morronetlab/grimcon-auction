@@ -41,7 +41,7 @@ function dataListenerCallback(data) {
     // Extract bid data
     let bidCount = Object.keys(bids).length - 1;
     row.children[1].innerText = bids[0].title;
-    row.children[2].innerText = `£${bids[bidCount].amount.toFixed(2)}`;
+    row.children[2].innerText = `NOK${bids[bidCount].amount.toFixed(2)}`;
     row.children[3].innerText = bidCount;
     if (bids[bidCount].uid) {
       getDoc(doc(db, "users", bids[bidCount].uid)).then((user) => {

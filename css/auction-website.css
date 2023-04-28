@@ -1,5 +1,5 @@
 html * {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 /* Bootstrap tweaks */
@@ -13,10 +13,10 @@ html * {
   border: none;
 }
 
-#info-modal-img {
+.modal-body > img {
   width: 100%;
 }
 
-.table {
+.card > .table {
   margin-bottom: 0;
 }

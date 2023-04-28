@@ -1,5 +1,5 @@
 // For a real auction, set this to false
-export const isDemo = true;
+export const isDemo = false;
 
 // Specify item details
 let items = [
